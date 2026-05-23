@@ -28,9 +28,9 @@
               "raw": "{\n  \"nombre\": \"Test User\",\n  \"correo\": \"test@example.com\",\n  \"contraseña\": \"password123\",\n  \"rol\": \"Usuario\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/registro-usuario.php",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["registro-usuario.php"]
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
             }
           },
           "response": []
@@ -47,9 +47,9 @@
               "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/auth.php",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["auth.php"]
+              "raw": "{{baseUrl}}/auth",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth"]
             }
           }
         },
@@ -59,9 +59,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/GET/lista-usuarios.php",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["GET","lista-usuarios.php"]
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
             }
           }
         },
@@ -77,9 +77,9 @@
               "raw": "{\n  \"id\": {{userId}},\n  \"nombre\": \"Updated Name\",\n  \"correo\": \"updated@example.com\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/PUT/actualizar-usuario.php?id={{userId}}",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["PUT","actualizar-usuario.php"],
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users","{{userId}}"],
               "query": [ { "key": "id", "value": "{{userId}}" } ]
             }
           }
@@ -90,9 +90,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/DELETE/borrar-usuario.php?id={{userId}}",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["DELETE","borrar-usuario.php"],
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users","{{userId}}"],
               "query": [ { "key": "id", "value": "{{userId}}" } ]
             }
           }
@@ -108,9 +108,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/productos",
+              "raw": "{{baseUrl}}/products",
               "host": ["{{baseUrl}}"],
-              "path": ["productos"]
+              "path": ["products"]
             }
           }
         },
@@ -120,9 +120,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/GET/lista-productos.php",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["GET","lista-productos.php"]
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
             }
           }
         },
@@ -136,9 +136,9 @@
               "raw": "{\n  \"categoria\": \"Ropa\",\n  \"nombre\": \"Camiseta Test\",\n  \"descripcion\": \"Descripción\",\n  \"precio\": 29.99,\n  \"imagen\": \"https://example.com/img.png\",\n  \"marca\": \"MarcaX\",\n  \"color\": \"Negro\",\n  \"talla\": \"M\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/crear-producto.php",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["crear-producto.php"]
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
             }
           }
         },
@@ -152,9 +152,9 @@
               "raw": "{\n  \"id\": {{productId}},\n  \"nombre\": \"Camiseta Actualizada\",\n  \"precio\": 34.99\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/PUT/actualizar-producto.php?id={{productId}}",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["PUT","actualizar-producto.php"],
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products","{{productId}}"],
               "query": [ { "key": "id", "value": "{{productId}}" } ]
             }
           }
@@ -169,9 +169,9 @@
               "raw": "{ \"id\": {{productId}} }"
             },
             "url": {
-              "raw": "{{baseUrl}}{{basePath}}/DELETE/borrar-producto.php?id={{productId}}",
-              "host": ["{{baseUrl}}{{basePath}}"],
-              "path": ["DELETE","borrar-producto.php"],
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products","{{productId}}"],
               "query": [ { "key": "id", "value": "{{productId}}" } ]
             }
           }
