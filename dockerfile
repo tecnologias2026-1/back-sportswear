@@ -11,10 +11,23 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
-# Apache apuntará a /apis
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/apis|g' /etc/apache2/sites-available/000-default.conf
+# Cambiar Apache para usar /apis como raíz
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/apis
 
-RUN sed -ri -e 's!/var/www/html!/var/www/html/apis!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/*.conf \
+    /etc/apache2/apache2.conf \
+    /etc/apache2/conf-available/*.conf
+
+RUN printf '%s\n' \
+'<Directory /var/www/html/apis>' \
+'    Options Indexes FollowSymLinks' \
+'    AllowOverride All' \
+'    Require all granted' \
+'    DirectoryIndex index.php' \
+'</Directory>' \
+> /etc/apache2/conf-available/apis.conf \
+&& a2enconf apis
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
