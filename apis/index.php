@@ -32,6 +32,17 @@ if (strpos($path, '/usuario') === 0) {
     handleUserRoutes($method, $path);
 
 }
+elseif (strpos($path, '/productos') === 0) {
+
+    // Map GET /api/productos to the existing route script
+    if ($method === 'GET') {
+        require_once __DIR__ . '/../routes/GET/lista-productos.php';
+    } else {
+        http_response_code(405);
+        echo json_encode(['error' => 'Método no permitido']);
+    }
+
+}
 elseif ($path === '' || $path === '/') {
 
     http_response_code(200);
