@@ -21,8 +21,6 @@ COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Instalar dependencias de PHP si existe composer.json
-RUN if [ -f composer.json ]; then composer install --no-interaction --no-dev --prefer-dist; fi
 
 EXPOSE 80
 
