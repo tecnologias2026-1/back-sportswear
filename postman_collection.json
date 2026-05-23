@@ -1,0 +1,182 @@
+{
+  "info": {
+    "name": "Back Sportswear API - Collection",
+    "_postman_id": "back-sportswear-collection",
+    "description": "Colección para probar las APIs de usuarios y productos. Ajusta variables `baseUrl` y `basePath` según despliegue (por ejemplo `https://back-sportswear.onrender.com` y `/api` o ``).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://back-sportswear.onrender.com" },
+    { "key": "basePath", "value": "/api" },
+    { "key": "userId", "value": "1" },
+    { "key": "productId", "value": "1" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Test User\",\n  \"correo\": \"test@example.com\",\n  \"contraseña\": \"password123\",\n  \"rol\": \"Usuario\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/registro-usuario.php",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["registro-usuario.php"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Auth (login)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/auth.php",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["auth.php"]
+            }
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/GET/lista-usuarios.php",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["GET","lista-usuarios.php"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{userId}},\n  \"nombre\": \"Updated Name\",\n  \"correo\": \"updated@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/PUT/actualizar-usuario.php?id={{userId}}",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["PUT","actualizar-usuario.php"],
+              "query": [ { "key": "id", "value": "{{userId}}" } ]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/DELETE/borrar-usuario.php?id={{userId}}",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["DELETE","borrar-usuario.php"],
+              "query": [ { "key": "id", "value": "{{userId}}" } ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products (front controller)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["productos"]
+            }
+          }
+        },
+        {
+          "name": "List Products (direct)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/GET/lista-productos.php",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["GET","lista-productos.php"]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoria\": \"Ropa\",\n  \"nombre\": \"Camiseta Test\",\n  \"descripcion\": \"Descripción\",\n  \"precio\": 29.99,\n  \"imagen\": \"https://example.com/img.png\",\n  \"marca\": \"MarcaX\",\n  \"color\": \"Negro\",\n  \"talla\": \"M\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/crear-producto.php",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["crear-producto.php"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{productId}},\n  \"nombre\": \"Camiseta Actualizada\",\n  \"precio\": 34.99\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/PUT/actualizar-producto.php?id={{productId}}",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["PUT","actualizar-producto.php"],
+              "query": [ { "key": "id", "value": "{{productId}}" } ]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"id\": {{productId}} }"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{basePath}}/DELETE/borrar-producto.php?id={{productId}}",
+              "host": ["{{baseUrl}}{{basePath}}"],
+              "path": ["DELETE","borrar-producto.php"],
+              "query": [ { "key": "id", "value": "{{productId}}" } ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
