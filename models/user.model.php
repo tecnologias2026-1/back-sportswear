@@ -1,87 +1,58 @@
 <?php
-require_once __DIR__ . '/../database/connection.php';
-
-global $conn;
-
+require_once __DIR__ . '/../database/conection.php';
 
 function getUsersModel() {
   global $conn;
-
-  $query = "SELECT * FROM users";
+  $query = "SELECT id, nombre, correo, creado, rol FROM usuario";
   $result = $conn->query($query);
-
-  if (!$result) {
-    return false;
+  $usuario = [];
+  if ($result) {
+    while ($row = $result->fetch_assoc()) {
+      $usuario[] = $row;
+    }
   }
-
-  $users = [];
-
-  while ($row = $result->fetch_assoc()) {
-    $users[] = $row;
-  }
-
-  return $users;
+  return $usuario;
 }
-
 
 function getUserByIdModel($id) {
   global $conn;
-
-  $query = "SELECT * FROM users WHERE id = ?";
+  $query = "SELECT id, nombre, correo, creado, rol FROM usuario WHERE id = ?";
   $stmt = $conn->prepare($query);
-
   $stmt->bind_param("i", $id);
   $stmt->execute();
-
   $result = $stmt->get_result();
-
   if ($result->num_rows === 0) {
     return null;
   }
-
   return $result->fetch_assoc();
 }
 
-function createUserModel($name, $email, $password, $role = 'user') {
+function createUserModel($nombre, $correo, $contrasena, $rol) {
   global $conn;
-
-  $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-  $query = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+  // NOTA: Como en tu base de datos pusiste varchar(8) para la contraseña, 
+  // se guardará en texto plano porque un hash seguro toma 60 caracteres.
+  $query = "INSERT INTO usuario (nombre, correo, contraseña, rol) VALUES (?, ?, ?, ?)";
   $stmt = $conn->prepare($query);
-
-  $stmt->bind_param("ssss", $name, $email, $hashedPassword, $role);
-
+  $stmt->bind_param("ssss", $nombre, $correo, $contrasena, $rol);
+  
   if ($stmt->execute()) {
-    return [
-      "success" => true,
-      "id" => $conn->insert_id
-    ];
+    return ["success" => true, "id" => $conn->insert_id];
   }
-
   return false;
 }
 
-
-function updateUserModel($id, $name, $email) {
+function updateUserModel($id, $nombre, $correo, $rol) {
   global $conn;
-
-  $query = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+  $query = "UPDATE usuario SET nombre = ?, correo = ?, rol = ? WHERE id = ?";
   $stmt = $conn->prepare($query);
-
-  $stmt->bind_param("ssi", $name, $email, $id);
-
+  $stmt->bind_param("sssi", $nombre, $correo, $rol, $id);
   return $stmt->execute();
 }
 
-
 function deleteUserModel($id) {
   global $conn;
-
-  $query = "DELETE FROM users WHERE id = ?";
+  $query = "DELETE FROM usuario WHERE id = ?";
   $stmt = $conn->prepare($query);
-
   $stmt->bind_param("i", $id);
-
   return $stmt->execute();
 }

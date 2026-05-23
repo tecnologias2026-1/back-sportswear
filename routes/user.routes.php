@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../database/connection.php';
+require_once __DIR__ . '/../database/conectionion.php';
 
 require_once __DIR__ . '/../controllers/user.controller.php';
 

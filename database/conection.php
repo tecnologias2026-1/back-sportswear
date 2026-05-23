@@ -1,19 +1,25 @@
 <?php
 
-// Database connection
+header('Content-Type: application/json');
 
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+function envValue(array $names, $default)
+{
+    foreach ($names as $name) {
+        $value = getenv($name);
 
-define('DB_USER', getenv('DB_USER') ?: 'root');
+        if ($value !== false && $value !== '') {
+            return $value;
+        }
+    }
 
-define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
+    return $default;
+}
 
-define('DB_NAME', getenv('DB_NAME') ?: 'test');
-
-define('DB_PORT', getenv('DB_PORT') ?: 3306);
-
-
-// Create connection
+define('DB_HOST', envValue(['MYSQLHOST', 'DB_HOST'], 'localhost'));
+define('DB_USER', envValue(['MYSQLUSER', 'DB_USER'], 'root'));
+define('DB_PASSWORD', envValue(['MYSQLPASSWORD', 'DB_PASSWORD'], ''));
+define('DB_NAME', envValue(['MYSQLDATABASE', 'DB_NAME'], 'sportswear'));
+define('DB_PORT', (int) envValue(['MYSQLPORT', 'DB_PORT'], 3306));
 
 $conn = new mysqli(
     DB_HOST,
@@ -23,25 +29,16 @@ $conn = new mysqli(
     DB_PORT
 );
 
-
-// Check connection
-
 if ($conn->connect_error) {
+    http_response_code(500);
 
     die(json_encode([
-        'error' => 'Error conectando a la base de datos'
+        'success' => false,
+        'message' => 'Error conectando a la base de datos',
+        'error' => $conn->connect_error
     ]));
 }
 
-
-// Set charset
-
-$conn->set_charset('utf8');
-
-
-echo "Conectado a la base de datos\n";
-
-
-$conn->close();
+$conn->set_charset('utf8mb4');
 
 ?>

@@ -1,28 +1,36 @@
 <?php
-header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Content-Type: application/json; charset=UTF-8");
 
-require_once __DIR__ . '/../../database/connection.php';
-require_once __DIR__ . '/../../models/user.model.php';
-
-
-$data = json_decode(file_get_contents('php://input'), true);
-
-if (!isset($data['name'], $data['email'], $data['password'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Datos incompletos']);
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-$name = $data['name'];
-$email = $data['email'];
-$password = $data['password'];
-$role = isset($data['role']) ? $data['role'] : 'user';
+require_once __DIR__ . '/../../models/user.model.php';
 
-$res = createUserModel($name, $email, $password, $role);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents("php://input"));
 
-if ($res && isset($res['success']) && $res['success']) {
-    echo json_encode(['success' => true, 'id' => $res['id']]);
+    if(!empty($data->nombre) && !empty($data->correo) && !empty($data->contraseña)) {
+        $rol = !empty($data->rol) ? $data->rol : 'Usuario'; // Rol por defecto
+
+        $resultado = createUserModel($data->nombre, $data->correo, $data->contraseña, $rol);
+        
+        if ($resultado) {
+            http_response_code(201);
+            echo json_encode(["mensaje" => "Usuario registrado exitosamente.", "id" => $resultado['id']]);
+        } else {
+            http_response_code(503);
+            echo json_encode(["mensaje" => "No se pudo registrar el usuario."]);
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(["mensaje" => "Datos incompletos. Nombre, correo y contraseña son requeridos."]);
+    }
 } else {
-    http_response_code(500);
-    echo json_encode(['error' => 'No se pudo crear el usuario']);
+    http_response_code(405);
+    echo json_encode(["error" => "Método no permitido"]);
 }
