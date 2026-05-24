@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/../database/conexion.php';
+require_once __DIR__ . '/../database/conection.php';
 
 // AGREGAR producto al carrito
 function agregarCarritoModel($usuario_id, $producto_id, $cantidad) {
