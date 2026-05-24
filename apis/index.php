@@ -35,12 +35,24 @@ if ($method === 'GET' && ($path === '/users' || $path === '/usuarios')) {
     exit;
 }
 
+<<<<<<< HEAD
 if ($method === 'GET' && preg_match('#^/(users|usuarios)/(\d+)$#', $path, $m)) {
     // If needed, set GET id param and include handler that reads it from $_GET or body
     $_GET['id'] = $m[2];
     require_once __DIR__ . '/../routes/GET/lista-usuarios.php';
     exit;
 }
+=======
+    // Map GET /api/productos to the existing route script
+    if ($method === 'GET') {
+       require_once __DIR__ . '/routes/GET/lista-productos.php';
+    } else {
+        http_response_code(405);
+        echo json_encode(['error' => 'Método no permitido']);
+    }
+    
+    
+>>>>>>> 28bb0b342e19668c548469da4718635c51a970de
 
 if ($method === 'POST' && ($path === '/users' || $path === '/registro-usuario' || $path === '/register')) {
     require_once __DIR__ . '/../routes/POST/registro-usuario.php';
@@ -101,13 +113,31 @@ elseif ($path === '' || $path === '/') {
     ]);
 
 }
-else {
-
-    http_response_code(404);
-
-    echo json_encode([
-        'error' => 'Ruta no encontrada'
-    ]);
-
+elseif (strpos($path, '/carrito') === 0) {
+    if ($method === 'GET') {
+        require_once __DIR__ . '/../routes/GET/ver-carrito.php';
+    } elseif ($method === 'POST') {
+        require_once __DIR__ . '/../routes/POST/agregar-carrito.php';
+    } elseif ($method === 'PUT') {
+        require_once __DIR__ . '/../routes/PUT/actualizar-carrito.php';
+    } elseif ($method === 'DELETE') {
+        $usuario_id = $_GET['vaciar'] ?? null;
+        if ($usuario_id) {
+            require_once __DIR__ . '/../routes/DELETE/vaciar-carrito.php';
+        } else {
+            require_once __DIR__ . '/../routes/DELETE/eliminar-carrito.php';
+        }
+    }
+}
+elseif (strpos($path, '/pedidos') === 0) {
+    if ($method === 'GET') {
+        require_once __DIR__ . '/../routes/GET/ver-pedidos.php';
+    } elseif ($method === 'POST') {
+        require_once __DIR__ . '/../routes/POST/crear-pedido.php';
+    } elseif ($method === 'PUT') {
+        require_once __DIR__ . '/../routes/PUT/cambiar-estado-pedido.php';
+    } elseif ($method === 'DELETE') {
+        require_once __DIR__ . '/../routes/DELETE/cancelar-pedido.php';
+    }
 }
 ?>
