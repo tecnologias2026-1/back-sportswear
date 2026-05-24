@@ -24,14 +24,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stock = isset($data->stock) ? (int)$data->stock : 0;
         $estado = isset($data->estado) ? (int)$data->estado : 1;
 
+        // Call model to create product
         $resultado = crearProductoModel($categoria, $data->nombre, $descripcion, $data->precio, $imagen, $marca, $color, $talla, $stock, $estado);
 
+        // DEBUG: include parsed stock in response to help diagnose why DB stores 0
         if ($resultado && is_array($resultado) && isset($resultado['id'])) {
             http_response_code(201);
-            echo json_encode(["mensaje" => "Producto creado exitosamente.", "id" => $resultado['id']]);
+            echo json_encode([
+                "mensaje" => "Producto creado exitosamente.",
+                "id" => $resultado['id'],
+                "received_stock" => $stock,
+                "raw_stock_value" => isset($data->stock) ? $data->stock : null
+            ]);
         } else {
             http_response_code(503);
-            echo json_encode(["mensaje" => "No se pudo crear el producto."]);
+            echo json_encode(["mensaje" => "No se pudo crear el producto.", "received_stock" => $stock, "raw_stock_value" => isset($data->stock) ? $data->stock : null]);
         }
     } else {
         http_response_code(400);
