@@ -19,7 +19,10 @@ function crearProductoModel($categoria, $nombre, $descripcion, $precio, $imagen,
   $query = "INSERT INTO productos (categoria, nombre, descripcion, precio, imagen, marca, color, talla) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   $stmt = $conn->prepare($query);
   $stmt->bind_param("sssdssss", $categoria, $nombre, $descripcion, $precio, $imagen, $marca, $color, $talla);
-  return $stmt->execute();
+  if ($stmt->execute()) {
+    return ["success" => true, "id" => $conn->insert_id];
+  }
+  return false;
 }
 
 // Actualizar un producto

@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $talla = $data->talla ?? '';
 
         $resultado = crearProductoModel($categoria, $data->nombre, $descripcion, $data->precio, $imagen, $marca, $color, $talla);
-        
-        if ($resultado) {
+
+        if ($resultado && is_array($resultado) && isset($resultado['id'])) {
             http_response_code(201);
-            echo json_encode(["mensaje" => "Producto creado exitosamente."]);
+            echo json_encode(["mensaje" => "Producto creado exitosamente.", "id" => $resultado['id']]);
         } else {
             http_response_code(503);
             echo json_encode(["mensaje" => "No se pudo crear el producto."]);
