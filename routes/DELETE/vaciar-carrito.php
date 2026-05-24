@@ -15,21 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
     $data = json_decode(file_get_contents("php://input"));
 
-    if (!empty($data->id)) {
+    if (!empty($data->usuario_id)) {
 
-        $resultado = eliminarItemCarritoModel($data->id);
+        $resultado = vaciarCarritoModel($data->usuario_id);
 
         if ($resultado) {
             http_response_code(200);
-            echo json_encode(["mensaje" => "Producto eliminado del carrito"]);
+            echo json_encode(["mensaje" => "Carrito vaciado"]);
         } else {
             http_response_code(503);
-            echo json_encode(["mensaje" => "No se pudo eliminar"]);
+            echo json_encode(["mensaje" => "No se pudo vaciar el carrito"]);
         }
 
     } else {
         http_response_code(400);
-        echo json_encode(["mensaje" => "id requerido"]);
+        echo json_encode(["mensaje" => "usuario_id requerido"]);
     }
 
 } else {
