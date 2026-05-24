@@ -54,13 +54,31 @@ elseif ($path === '' || $path === '/') {
     ]);
 
 }
-else {
-
-    http_response_code(404);
-
-    echo json_encode([
-        'error' => 'Ruta no encontrada'
-    ]);
-
+elseif (strpos($path, '/carrito') === 0) {
+    if ($method === 'GET') {
+        require_once __DIR__ . '/../routes/GET/ver-carrito.php';
+    } elseif ($method === 'POST') {
+        require_once __DIR__ . '/../routes/POST/agregar-carrito.php';
+    } elseif ($method === 'PUT') {
+        require_once __DIR__ . '/../routes/PUT/actualizar-carrito.php';
+    } elseif ($method === 'DELETE') {
+        $usuario_id = $_GET['vaciar'] ?? null;
+        if ($usuario_id) {
+            require_once __DIR__ . '/../routes/DELETE/vaciar-carrito.php';
+        } else {
+            require_once __DIR__ . '/../routes/DELETE/eliminar-carrito.php';
+        }
+    }
+}
+elseif (strpos($path, '/pedidos') === 0) {
+    if ($method === 'GET') {
+        require_once __DIR__ . '/../routes/GET/ver-pedidos.php';
+    } elseif ($method === 'POST') {
+        require_once __DIR__ . '/../routes/POST/crear-pedido.php';
+    } elseif ($method === 'PUT') {
+        require_once __DIR__ . '/../routes/PUT/cambiar-estado-pedido.php';
+    } elseif ($method === 'DELETE') {
+        require_once __DIR__ . '/../routes/DELETE/cancelar-pedido.php';
+    }
 }
 ?>
