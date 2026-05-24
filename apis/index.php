@@ -35,24 +35,12 @@ if ($method === 'GET' && ($path === '/users' || $path === '/usuarios')) {
     exit;
 }
 
-<<<<<<< HEAD
 if ($method === 'GET' && preg_match('#^/(users|usuarios)/(\d+)$#', $path, $m)) {
     // If needed, set GET id param and include handler that reads it from $_GET or body
     $_GET['id'] = $m[2];
     require_once __DIR__ . '/../routes/GET/lista-usuarios.php';
     exit;
 }
-=======
-    // Map GET /api/productos to the existing route script
-    if ($method === 'GET') {
-       require_once __DIR__ . '/routes/GET/lista-productos.php';
-    } else {
-        http_response_code(405);
-        echo json_encode(['error' => 'Método no permitido']);
-    }
-    
-    
->>>>>>> 28bb0b342e19668c548469da4718635c51a970de
 
 if ($method === 'POST' && ($path === '/users' || $path === '/registro-usuario' || $path === '/register')) {
     require_once __DIR__ . '/../routes/POST/registro-usuario.php';
