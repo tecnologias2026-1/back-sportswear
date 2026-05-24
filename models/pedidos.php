@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/../database/conexion.php';
+require_once __DIR__ . '/../database/conection.php';
 
 // CREAR pedido
 function crearPedidoModel($usuario_id, $total) {
