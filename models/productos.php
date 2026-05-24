@@ -14,11 +14,12 @@ function getProductosModel() {
 }
 
 // Crear un producto
-function crearProductoModel($categoria, $nombre, $descripcion, $precio, $imagen, $marca, $color, $talla) {
+function crearProductoModel($categoria, $nombre, $descripcion, $precio, $imagen, $marca, $color, $talla, $stock = 0, $estado = 1) {
   global $conn;
-  $query = "INSERT INTO productos (categoria, nombre, descripcion, precio, imagen, marca, color, talla) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  // Include stock and estado with defaults to avoid DB errors when columns are required
+  $query = "INSERT INTO productos (categoria, nombre, descripcion, precio, imagen, marca, color, talla, stock, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   $stmt = $conn->prepare($query);
-  $stmt->bind_param("sssdssss", $categoria, $nombre, $descripcion, $precio, $imagen, $marca, $color, $talla);
+  $stmt->bind_param("sssdssssii", $categoria, $nombre, $descripcion, $precio, $imagen, $marca, $color, $talla, $stock, $estado);
   if ($stmt->execute()) {
     return ["success" => true, "id" => $conn->insert_id];
   }

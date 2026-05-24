@@ -21,8 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $marca = $data->marca ?? '';
         $color = $data->color ?? '';
         $talla = $data->talla ?? '';
+        $stock = isset($data->stock) ? (int)$data->stock : 0;
+        $estado = isset($data->estado) ? (int)$data->estado : 1;
 
-        $resultado = crearProductoModel($categoria, $data->nombre, $descripcion, $data->precio, $imagen, $marca, $color, $talla);
+        $resultado = crearProductoModel($categoria, $data->nombre, $descripcion, $data->precio, $imagen, $marca, $color, $talla, $stock, $estado);
 
         if ($resultado && is_array($resultado) && isset($resultado['id'])) {
             http_response_code(201);
