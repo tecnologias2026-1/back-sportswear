@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{base_url}}/pedidos?usuario_id=1"
+method: GET
+queryParams:
+  usuario_id: "1"
+order: 2000

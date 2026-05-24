@@ -19,7 +19,7 @@ function verTodosPedidosModel() {
 
     $sql = "SELECT p.*, u.nombre AS usuario_nombre
             FROM pedidos p
-            JOIN usuarios u ON p.usuario_id = u.id
+            JOIN usuario u ON p.usuario_id = u.id
             ORDER BY p.fecha DESC";
 
     $stmt = $conn->prepare($sql);

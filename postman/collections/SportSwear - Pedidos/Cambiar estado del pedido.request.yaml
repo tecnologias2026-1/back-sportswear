@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{base_url}}/pedidos"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "id": 1,
+      "estado": "enviado"
+    }
+order: 4000

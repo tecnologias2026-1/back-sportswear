@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{base_url}}/carrito?vaciar=1"
+method: DELETE
+headers:
+  Content-Type: application/json
+queryParams:
+  vaciar: "1"
+body:
+  type: text
+  content: |-
+    {
+      "usuario_id": 1
+    }
+order: 5000

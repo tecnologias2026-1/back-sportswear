@@ -1,0 +1,14 @@
+# Use this workspace to collaborate
+workspace:
+  id: ""
+
+localResources:
+  collections:
+    - ..\postman_collection.json
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ..\postman\collections\SportSwear - Pedidos: 59935f9b-289c-4232-a07e-3547cc0e19fa
+    ..\postman\collections\SportSwear - Carrito: 21021fa5-6da3-4620-9d38-d5377a513a88

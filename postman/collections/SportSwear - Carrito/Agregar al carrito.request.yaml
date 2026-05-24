@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{base_url}}/carrito"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "usuario_id": 1,
+      "producto_id": 1,
+      "cantidad": 2
+    }
+order: 2000

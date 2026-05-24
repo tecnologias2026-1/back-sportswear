@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{base_url}}/pedidos"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "usuario_id": 1
+    }
+order: 3000
