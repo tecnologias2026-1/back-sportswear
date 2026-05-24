@@ -27,6 +27,19 @@ function getUserByIdModel($id) {
   return $result->fetch_assoc();
 }
 
+function getUserByEmailModel($email) {
+  global $conn;
+  $query = "SELECT id, nombre, correo, creado, rol FROM usuario WHERE correo = ? LIMIT 1";
+  $stmt = $conn->prepare($query);
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  if ($result->num_rows === 0) {
+    return null;
+  }
+  return $result->fetch_assoc();
+}
+
 function createUserModel($nombre, $correo, $contrasena, $rol) {
   global $conn;
   // NOTA: Como en tu base de datos pusiste varchar(8) para la contraseña, 

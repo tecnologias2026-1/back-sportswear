@@ -25,8 +25,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
         
     } else {
-        $usuarios = getUsersModel();
-        echo json_encode($usuarios);
+            // Also accept email query parameters: correo or email
+            $correo = isset($_GET['correo']) ? trim($_GET['correo']) : (isset($_GET['email']) ? trim($_GET['email']) : null);
+
+            if (!empty($id)) {
+                $usuario = getUserByIdModel($id);
+                if ($usuario === null) {
+                    http_response_code(404);
+                    echo json_encode(["error" => "Usuario no encontrado"]);
+                } else {
+                    echo json_encode($usuario);
+                }
+            } elseif (!empty($correo)) {
+                $usuario = getUserByEmailModel($correo);
+                if ($usuario === null) {
+                    http_response_code(404);
+                    echo json_encode(["error" => "Usuario no encontrado"]);
+                } else {
+                    echo json_encode($usuario);
+                }
+            } else {
+                $usuarios = getUsersModel();
+                echo json_encode($usuarios);
+            }
     }
 } else {
     http_response_code(405);
