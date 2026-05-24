@@ -36,7 +36,7 @@ elseif (strpos($path, '/productos') === 0) {
 
     // Map GET /api/productos to the existing route script
     if ($method === 'GET') {
-        require_once __DIR__ . '/../routes/GET/lista-productos.php';
+       require_once __DIR__ . '/routes/GET/lista-productos.php';
     } else {
         http_response_code(405);
         echo json_encode(['error' => 'Método no permitido']);
