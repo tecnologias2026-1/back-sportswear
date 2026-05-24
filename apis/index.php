@@ -54,21 +54,6 @@ elseif ($path === '' || $path === '/') {
     ]);
 
 }
-    elseif (strpos($path, '/carrito') === 0) {
-    if ($method === 'GET') {
-        require_once __DIR__ . '/../routes/GET/ver-carrito.php';
-    } elseif ($method === 'POST') {
-        require_once __DIR__ . '/../routes/POST/agregar-carrito.php';
-    } elseif ($method === 'PUT') {
-        require_once __DIR__ . '/../routes/PUT/actualizar-carrito.php';
-    } elseif ($method === 'DELETE') {
-        if (isset($_GET['vaciar'])) {
-            require_once __DIR__ . '/../routes/DELETE/vaciar-carrito.php';
-        } else {
-            require_once __DIR__ . '/../routes/DELETE/eliminar-carrito.php';
-        }
-    }
-}
 else {
 
     http_response_code(404);
