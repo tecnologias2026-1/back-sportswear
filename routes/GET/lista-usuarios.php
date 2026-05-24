@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         } else {
             echo json_encode($usuario);
         }
+        
     } else {
         $usuarios = getUsersModel();
         echo json_encode($usuarios);
