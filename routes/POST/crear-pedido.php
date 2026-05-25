@@ -37,11 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($resultado) {
             // Reducir el stock de cada producto
             global $conn;
-            foreach ($carrito as $item) {
-                $sql = "UPDATE productos SET stock = stock - ? WHERE id = ? AND stock >= ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("iii", $item['cantidad'], $item['producto_id'], $item['cantidad']);
-                $stmt->execute();
+           foreach ($carrito as $item) {
+    reducirStockModel($item['producto_id'], $item['cantidad']);
             }
 
             // Vacía el carrito después de crear el pedido

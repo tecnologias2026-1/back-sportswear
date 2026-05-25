@@ -95,3 +95,11 @@ function vaciarCarritoModel($usuario_id) {
     $stmt->bind_param("i", $usuario_id);
     return $stmt->execute();
 }
+function reducirStockModel($producto_id, $cantidad) {
+    global $conn;
+    $sql = "UPDATE productos SET stock = stock - ? WHERE id = ? AND stock >= ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iii", $cantidad, $producto_id, $cantidad);
+    return $stmt->execute();
+}
+?>
