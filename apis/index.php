@@ -82,6 +82,38 @@ if ($method === 'DELETE' && preg_match('#^/(products|productos)/(\d+)$#', $path,
     require_once __DIR__ . '/../routes/DELETE/borrar-producto.php';
     exit;
 }
+<<<<<<< HEAD
+=======
+// Categories endpoints
+if ($method === 'GET' && ($path === '/categorias' || $path === '/categories')) {
+    require_once __DIR__ . '/../routes/GET/lista-categorias.php';
+    exit;
+}
+
+if ($method === 'GET' && preg_match('#^/(categorias|categories)/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[2];
+    require_once __DIR__ . '/../routes/GET/lista-categorias.php';
+    exit;
+}
+
+if ($method === 'POST' && ($path === '/categorias' || $path === '/categories' || $path === '/crear-categoria')) {
+    require_once __DIR__ . '/../routes/POST/crear-categoria.php';
+    exit;
+}
+
+if ($method === 'PUT' && preg_match('#^/(categorias|categories)/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[2];
+    require_once __DIR__ . '/../routes/PUT/actualizar-categoria.php';
+    exit;
+}
+
+if ($method === 'DELETE' && preg_match('#^/(categorias|categories)/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[2];
+    require_once __DIR__ . '/../routes/DELETE/borrar-categoria.php';
+    exit;
+}
+elseif ($path === '' || $path === '/') {
+>>>>>>> 05fb1a7a41ebb459fed41f369652d1881f994d5c
 
 // ── CARRITO ───────────────────────────────────────────────────
 if ($method === 'GET' && $path === '/carrito') {
