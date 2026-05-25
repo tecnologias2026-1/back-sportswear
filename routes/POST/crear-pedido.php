@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../models/pedidos.php';
 require_once __DIR__ . '/../../models/carrito.php';
+require_once __DIR__ . '/../../database/conection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -34,8 +35,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resultado = crearPedidoModel($data->usuario_id, $total);
 
         if ($resultado) {
+            // Reducir el stock de cada producto
+            global $conn;
+            foreach ($carrito as $item) {
+                $sql = "UPDATE productos SET stock = stock - ? WHERE id = ? AND stock >= ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iii", $item['cantidad'], $item['producto_id'], $item['cantidad']);
+                $stmt->execute();
+            }
+
             // Vacía el carrito después de crear el pedido
             vaciarCarritoModel($data->usuario_id);
+
             http_response_code(201);
             echo json_encode(["mensaje" => "Pedido creado exitosamente", "total" => $total]);
         } else {
