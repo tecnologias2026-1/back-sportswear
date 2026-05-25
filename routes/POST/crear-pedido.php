@@ -26,9 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        $total = array_reduce($carrito, function($sum, $item) {
-            return $sum + $item['subtotal'];
-        }, 0);
+        $subtotal = array_reduce($carrito, function($sum, $item) {
+    return $sum + $item['subtotal'];
+}, 0);
+$total = $subtotal * 1.19; // incluye IVA 19%
 
         $nombre       = $data->nombre ?? '';
         $apellido     = $data->apellido ?? '';
