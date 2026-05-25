@@ -14,18 +14,18 @@ require_once __DIR__ . '/../../models/productos.php';
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents("php://input"));
     
-    // Intenta tomar el ID de la URL (?id=...) o del body JSON
     $id = $_GET['id'] ?? ($data->id ?? null);
 
     if(!empty($id) && !empty($data->nombre) && !empty($data->precio)) {
-        $categoria = $data->categoria ?? '';
+        $categoria   = $data->categoria ?? '';
         $descripcion = $data->descripcion ?? '';
-        $imagen = $data->imagen ?? '';
-        $marca = $data->marca ?? '';
-        $color = $data->color ?? '';
-        $talla = $data->talla ?? '';
+        $imagen      = $data->imagen ?? '';
+        $marca       = $data->marca ?? '';
+        $color       = $data->color ?? '';
+        $talla       = $data->talla ?? '';
+        $stock       = $data->stock ?? 0;
 
-        $resultado = actualizarProductoModel($id, $categoria, $data->nombre, $descripcion, $data->precio, $imagen, $marca, $color, $talla);
+        $resultado = actualizarProductoModel($id, $categoria, $data->nombre, $descripcion, $data->precio, $imagen, $marca, $color, $talla, $stock);
         
         if ($resultado) {
             http_response_code(200);
