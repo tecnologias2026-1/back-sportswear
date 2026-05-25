@@ -167,6 +167,10 @@ if ($method === 'GET' && $path === '/pedido-items') {
     require_once __DIR__ . '/../routes/GET/ver-pedido-items.php';
     exit;
 }
+if ($method === 'PUT' && $path === '/pedido-items') {
+    require_once __DIR__ . '/../routes/PUT/actualizar-pedido-item.php';
+    exit;
+}
 
 // ── RAÍZ ──────────────────────────────────────────────────────
 if ($path === '/') {
