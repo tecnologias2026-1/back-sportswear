@@ -54,7 +54,7 @@ function verCarritoModel($usuario_id) {
     global $conn;
 
     $sql = "SELECT c.id, c.cantidad, c.producto_id,
-                   p.nombre, p.precio, p.imagen,
+                   p.nombre, p.precio, p.imagen, p.stock,
                    (c.cantidad * p.precio) AS subtotal
             FROM carrito c
             JOIN productos p ON c.producto_id = p.id
@@ -66,7 +66,6 @@ function verCarritoModel($usuario_id) {
     $resultado = $stmt->get_result();
     return $resultado->fetch_all(MYSQLI_ASSOC);
 }
-
 // ACTUALIZAR cantidad de un item
 function actualizarCantidadModel($id, $cantidad) {
     global $conn;
