@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             vaciarCarritoModel($data->usuario_id);
 
             http_response_code(201);
-            echo json_encode(["mensaje" => "Pedido creado exitosamente", "total" => $total]);
+            echo json_encode(["mensaje" => "Pedido creado exitosamente", "total" => $total, "id" => $pedido_id]);
         } else {
             http_response_code(503);
             echo json_encode(["mensaje" => "No se pudo crear el pedido"]);
