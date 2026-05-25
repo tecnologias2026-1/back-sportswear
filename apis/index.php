@@ -8,35 +8,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 header("Content-Type: application/json");
 spl_autoload_register(function ($class) {
-
     $file = __DIR__ . '/' . str_replace('\\', '/', $class) . '.php';
-
     if (file_exists($file)) {
         require_once $file;
     }
-
 });
 
-// Get request method and path
 $method = $_SERVER['REQUEST_METHOD'];
-
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// Allow both /api prefixed and root paths
 $path = str_replace('/api', '', $path);
 $path = rtrim($path, '/');
 if ($path === '') $path = '/';
 
-// Route requests
-// Normalize paths and map to existing route scripts. Support English/Spanish synonyms.
-// Users endpoints
+// ── USUARIOS ─────────────────────────────────────────────────
 if ($method === 'GET' && ($path === '/users' || $path === '/usuarios')) {
     require_once __DIR__ . '/../routes/GET/lista-usuarios.php';
     exit;
 }
 
 if ($method === 'GET' && preg_match('#^/(users|usuarios)/(\d+)$#', $path, $m)) {
-    // If needed, set GET id param and include handler that reads it from $_GET or body
     $_GET['id'] = $m[2];
     require_once __DIR__ . '/../routes/GET/lista-usuarios.php';
     exit;
@@ -64,8 +54,8 @@ if ($method === 'DELETE' && preg_match('#^/(users|usuarios)/(\d+)$#', $path, $m)
     exit;
 }
 
-// Products endpoints
-if ($method === 'GET' && ($path === '/products' || $path === '/productos' || $path === '/productos')) {
+// ── PRODUCTOS ─────────────────────────────────────────────────
+if ($method === 'GET' && ($path === '/products' || $path === '/productos')) {
     require_once __DIR__ . '/../routes/GET/lista-productos.php';
     exit;
 }
@@ -92,40 +82,57 @@ if ($method === 'DELETE' && preg_match('#^/(products|productos)/(\d+)$#', $path,
     require_once __DIR__ . '/../routes/DELETE/borrar-producto.php';
     exit;
 }
-elseif ($path === '' || $path === '/') {
 
+// ── CARRITO ───────────────────────────────────────────────────
+if ($method === 'GET' && $path === '/carrito') {
+    require_once __DIR__ . '/../routes/GET/ver-carrito.php';
+    exit;
+}
+
+if ($method === 'POST' && $path === '/carrito') {
+    require_once __DIR__ . '/../routes/POST/agregar-carrito.php';
+    exit;
+}
+
+if ($method === 'PUT' && $path === '/carrito') {
+    require_once __DIR__ . '/../routes/PUT/actualizar-carrito.php';
+    exit;
+}
+
+if ($method === 'DELETE' && $path === '/carrito' && isset($_GET['vaciar'])) {
+    require_once __DIR__ . '/../routes/DELETE/vaciar-carrito.php';
+    exit;
+}
+
+if ($method === 'DELETE' && $path === '/carrito') {
+    require_once __DIR__ . '/../routes/DELETE/eliminar-carrito.php';
+    exit;
+}
+
+// ── PEDIDOS ───────────────────────────────────────────────────
+if ($method === 'GET' && $path === '/pedidos') {
+    require_once __DIR__ . '/../routes/GET/ver-pedidos.php';
+    exit;
+}
+
+if ($method === 'POST' && $path === '/pedidos') {
+    require_once __DIR__ . '/../routes/POST/crear-pedido.php';
+    exit;
+}
+
+if ($method === 'PUT' && $path === '/pedidos') {
+    require_once __DIR__ . '/../routes/PUT/cambiar-estado-pedido.php';
+    exit;
+}
+
+if ($method === 'DELETE' && $path === '/pedidos') {
+    require_once __DIR__ . '/../routes/DELETE/cancelar-pedido.php';
+    exit;
+}
+
+// ── RAÍZ ──────────────────────────────────────────────────────
+if ($path === '/') {
     http_response_code(200);
-
-    echo json_encode([
-        'message' => 'Servidor backend activo'
-    ]);
-
-}
-elseif (strpos($path, '/carrito') === 0) {
-    if ($method === 'GET') {
-        require_once __DIR__ . '/../routes/GET/ver-carrito.php';
-    } elseif ($method === 'POST') {
-        require_once __DIR__ . '/../routes/POST/agregar-carrito.php';
-    } elseif ($method === 'PUT') {
-        require_once __DIR__ . '/../routes/PUT/actualizar-carrito.php';
-    } elseif ($method === 'DELETE') {
-        $usuario_id = $_GET['vaciar'] ?? null;
-        if ($usuario_id) {
-            require_once __DIR__ . '/../routes/DELETE/vaciar-carrito.php';
-        } else {
-            require_once __DIR__ . '/../routes/DELETE/eliminar-carrito.php';
-        }
-    }
-}
-elseif (strpos($path, '/pedidos') === 0) {
-    if ($method === 'GET') {
-        require_once __DIR__ . '/../routes/GET/ver-pedidos.php';
-    } elseif ($method === 'POST') {
-        require_once __DIR__ . '/../routes/POST/crear-pedido.php';
-    } elseif ($method === 'PUT') {
-        require_once __DIR__ . '/../routes/PUT/cambiar-estado-pedido.php';
-    } elseif ($method === 'DELETE') {
-        require_once __DIR__ . '/../routes/DELETE/cancelar-pedido.php';
-    }
+    echo json_encode(['message' => 'Servidor backend activo']);
 }
 ?>
