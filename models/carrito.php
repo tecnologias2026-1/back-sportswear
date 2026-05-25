@@ -1,29 +1,52 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Content-Type: application/json");
-
-// Responder preflight OPTIONS
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
 require_once __DIR__ . '/../database/conection.php';
 
 // AGREGAR producto al carrito
 function agregarCarritoModel($usuario_id, $producto_id, $cantidad) {
     global $conn;
 
-    // Si ya existe ese producto en el carrito del usuario, suma la cantidad
+    // 1. Obtener stock real del producto
+    $sqlStock = "SELECT stock FROM productos WHERE id = ?";
+    $stmtStock = $conn->prepare($sqlStock);
+    $stmtStock->bind_param("i", $producto_id);
+    $stmtStock->execute();
+    $resStock = $stmtStock->get_result();
+    $producto = $resStock->fetch_assoc();
+
+    if (!$producto) {
+        return ['error' => 'Producto no encontrado'];
+    }
+
+    $stockReal = $producto['stock'];
+
+    // 2. Ver cuánto tiene ya en el carrito ese usuario
+    $sqlCarrito = "SELECT cantidad FROM carrito WHERE usuario_id = ? AND producto_id = ?";
+    $stmtCarrito = $conn->prepare($sqlCarrito);
+    $stmtCarrito->bind_param("ii", $usuario_id, $producto_id);
+    $stmtCarrito->execute();
+    $resCarrito = $stmtCarrito->get_result();
+    $itemCarrito = $resCarrito->fetch_assoc();
+
+    $cantidadEnCarrito = $itemCarrito ? $itemCarrito['cantidad'] : 0;
+
+    // 3. Verificar que no supere el stock disponible
+    $stockDisponible = $stockReal - $cantidadEnCarrito;
+
+    if ($cantidad > $stockDisponible) {
+        return ['error' => "Solo hay $stockDisponible unidades disponibles"];
+    }
+
+    // 4. Agregar al carrito
     $sql = "INSERT INTO carrito (usuario_id, producto_id, cantidad)
             VALUES (?, ?, ?)
             ON DUPLICATE KEY UPDATE cantidad = cantidad + VALUES(cantidad)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("iii", $usuario_id, $producto_id, $cantidad);
-    return $stmt->execute();
+    $stmt->execute();
+
+    return ['success' => true];
 }
 
 // VER carrito de un usuario (con datos del producto)
@@ -73,5 +96,3 @@ function vaciarCarritoModel($usuario_id) {
     $stmt->bind_param("i", $usuario_id);
     return $stmt->execute();
 }
-
-?>
