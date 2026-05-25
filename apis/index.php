@@ -82,8 +82,6 @@ if ($method === 'DELETE' && preg_match('#^/(products|productos)/(\d+)$#', $path,
     require_once __DIR__ . '/../routes/DELETE/borrar-producto.php';
     exit;
 }
-<<<<<<< HEAD
-=======
 // Categories endpoints
 if ($method === 'GET' && ($path === '/categorias' || $path === '/categories')) {
     require_once __DIR__ . '/../routes/GET/lista-categorias.php';
@@ -113,7 +111,6 @@ if ($method === 'DELETE' && preg_match('#^/(categorias|categories)/(\d+)$#', $pa
     exit;
 }
 elseif ($path === '' || $path === '/') {
->>>>>>> 05fb1a7a41ebb459fed41f369652d1881f994d5c
 
 // ── CARRITO ───────────────────────────────────────────────────
 if ($method === 'GET' && $path === '/carrito') {
