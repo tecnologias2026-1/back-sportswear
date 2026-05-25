@@ -1,17 +1,8 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Content-Type: application/json");
-// Responder preflight OPTIONS
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
 require_once __DIR__ . '/../database/conection.php';
 
-// CREAR pedido
+// CREAR pedido - retorna el id del pedido creado
 function crearPedidoModel($usuario_id, $total, $nombre, $apellido, $telefono, $direccion, $ciudad, $departamento, $codigo_postal, $pais, $metodo_pago) {
     global $conn;
 
@@ -20,7 +11,11 @@ function crearPedidoModel($usuario_id, $total, $nombre, $apellido, $telefono, $d
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("idsssssssss", $usuario_id, $total, $nombre, $apellido, $telefono, $direccion, $ciudad, $departamento, $codigo_postal, $pais, $metodo_pago);
-    return $stmt->execute();
+
+    if ($stmt->execute()) {
+        return $conn->insert_id;
+    }
+    return false;
 }
 
 // VER todos los pedidos (admin)
@@ -72,4 +67,3 @@ function cancelarPedidoModel($id) {
     $stmt->bind_param("i", $id);
     return $stmt->execute();
 }
-?>

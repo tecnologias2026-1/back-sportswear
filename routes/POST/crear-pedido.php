@@ -25,20 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(["mensaje" => "El carrito está vacío"]);
             exit();
         }
-$subtotal = array_reduce($carrito, function($sum, $item) {
-    return $sum + $item['subtotal'];
-}, 0);
-$total = round($subtotal * 1.19);
 
-        $nombre       = $data->nombre ?? '';
-        $apellido     = $data->apellido ?? '';
-        $telefono     = $data->telefono ?? '';
-        $direccion    = $data->direccion ?? '';
-        $ciudad       = $data->ciudad ?? '';
-        $departamento = $data->departamento ?? '';
+        $subtotal = array_reduce($carrito, function($sum, $item) {
+            return $sum + $item['subtotal'];
+        }, 0);
+        $total = round($subtotal * 1.19);
+
+        $nombre        = $data->nombre ?? '';
+        $apellido      = $data->apellido ?? '';
+        $telefono      = $data->telefono ?? '';
+        $direccion     = $data->direccion ?? '';
+        $ciudad        = $data->ciudad ?? '';
+        $departamento  = $data->departamento ?? '';
         $codigo_postal = $data->codigo_postal ?? '';
-        $pais         = $data->pais ?? 'Colombia';
-        $metodo_pago  = $data->metodo_pago ?? 'contraentrega';
+        $pais          = $data->pais ?? 'Colombia';
+        $metodo_pago   = $data->metodo_pago ?? 'contraentrega';
 
         $resultado = crearPedidoModel(
             $data->usuario_id, $total,
@@ -48,6 +49,17 @@ $total = round($subtotal * 1.19);
         );
 
         if ($resultado) {
+            $pedido_id = $resultado;
+
+            // Guardar items del pedido en pedido_items
+            foreach ($carrito as $item) {
+                $sqlItem = "INSERT INTO pedido_items (pedido_id, producto_id, nombre, precio, cantidad, imagen, subtotal)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmtItem = $conn->prepare($sqlItem);
+                $stmtItem->bind_param("iisdiss", $pedido_id, $item['producto_id'], $item['nombre'], $item['precio'], $item['cantidad'], $item['imagen'], $item['subtotal']);
+                $stmtItem->execute();
+            }
+
             // Reducir stock
             foreach ($carrito as $item) {
                 reducirStockModel($item['producto_id'], $item['cantidad']);
