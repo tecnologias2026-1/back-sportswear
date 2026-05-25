@@ -5,12 +5,11 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Content-Type: application/json");
 
-// Responder preflight OPTIONS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-header("Content-Type: application/json");
+
 spl_autoload_register(function ($class) {
     $file = __DIR__ . '/' . str_replace('\\', '/', $class) . '.php';
     if (file_exists($file)) {
@@ -86,7 +85,8 @@ if ($method === 'DELETE' && preg_match('#^/(products|productos)/(\d+)$#', $path,
     require_once __DIR__ . '/../routes/DELETE/borrar-producto.php';
     exit;
 }
-// Categories endpoints
+
+// ── CATEGORIAS ────────────────────────────────────────────────
 if ($method === 'GET' && ($path === '/categorias' || $path === '/categories')) {
     require_once __DIR__ . '/../routes/GET/lista-categorias.php';
     exit;
@@ -110,36 +110,6 @@ if ($method === 'PUT' && preg_match('#^/(categorias|categories)/(\d+)$#', $path,
 }
 
 if ($method === 'DELETE' && preg_match('#^/(categorias|categories)/(\d+)$#', $path, $m)) {
-    $_GET['id'] = $m[2];
-    require_once __DIR__ . '/../routes/DELETE/borrar-categoria.php';
-    exit;
-}
-elseif ($path === '' || $path === '/')
-
-// ── CATEGORIAS ────────────────────────────────────────────────
-if ($method === 'GET' && ($path === '/categories' || $path === '/categorias')) {
-    require_once __DIR__ . '/../routes/GET/lista-categorias.php';
-    exit;
-}
-
-if ($method === 'GET' && preg_match('#^/(categories|categorias)/(\d+)$#', $path, $m)) {
-    $_GET['id'] = $m[2];
-    require_once __DIR__ . '/../routes/GET/lista-categorias.php';
-    exit;
-}
-
-if ($method === 'POST' && ($path === '/categories' || $path === '/categorias' || $path === '/crear-categoria')) {
-    require_once __DIR__ . '/../routes/POST/crear-categoria.php';
-    exit;
-}
-
-if ($method === 'PUT' && preg_match('#^/(categories|categorias)/(\d+)$#', $path, $m)) {
-    $_GET['id'] = $m[2];
-    require_once __DIR__ . '/../routes/PUT/actualizar-categoria.php';
-    exit;
-}
-
-if ($method === 'DELETE' && preg_match('#^/(categories|categorias)/(\d+)$#', $path, $m)) {
     $_GET['id'] = $m[2];
     require_once __DIR__ . '/../routes/DELETE/borrar-categoria.php';
     exit;
@@ -189,6 +159,12 @@ if ($method === 'PUT' && $path === '/pedidos') {
 
 if ($method === 'DELETE' && $path === '/pedidos') {
     require_once __DIR__ . '/../routes/DELETE/cancelar-pedido.php';
+    exit;
+}
+
+// ── PEDIDO ITEMS ──────────────────────────────────────────────
+if ($method === 'GET' && $path === '/pedido-items') {
+    require_once __DIR__ . '/../routes/GET/ver-pedido-items.php';
     exit;
 }
 
