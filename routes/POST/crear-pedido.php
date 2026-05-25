@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../../models/pedidos.php';
 require_once __DIR__ . '/../../models/carrito.php';
-require_once __DIR__ . '/../../database/conection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -19,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($data->usuario_id)) {
 
-        // Calcula el total desde el carrito del usuario
         $carrito = verCarritoModel($data->usuario_id);
 
         if (empty($carrito)) {
@@ -32,16 +30,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return $sum + $item['subtotal'];
         }, 0);
 
-        $resultado = crearPedidoModel($data->usuario_id, $total);
+        $nombre       = $data->nombre ?? '';
+        $apellido     = $data->apellido ?? '';
+        $telefono     = $data->telefono ?? '';
+        $direccion    = $data->direccion ?? '';
+        $ciudad       = $data->ciudad ?? '';
+        $departamento = $data->departamento ?? '';
+        $codigo_postal = $data->codigo_postal ?? '';
+        $pais         = $data->pais ?? 'Colombia';
+        $metodo_pago  = $data->metodo_pago ?? 'contraentrega';
+
+        $resultado = crearPedidoModel(
+            $data->usuario_id, $total,
+            $nombre, $apellido, $telefono,
+            $direccion, $ciudad, $departamento,
+            $codigo_postal, $pais, $metodo_pago
+        );
 
         if ($resultado) {
-            // Reducir el stock de cada producto
-            global $conn;
-           foreach ($carrito as $item) {
-    reducirStockModel($item['producto_id'], $item['cantidad']);
+            // Reducir stock
+            foreach ($carrito as $item) {
+                reducirStockModel($item['producto_id'], $item['cantidad']);
             }
 
-            // Vacía el carrito después de crear el pedido
+            // Vaciar carrito
             vaciarCarritoModel($data->usuario_id);
 
             http_response_code(201);
