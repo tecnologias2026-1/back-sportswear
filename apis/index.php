@@ -116,6 +116,35 @@ if ($method === 'DELETE' && preg_match('#^/(categorias|categories)/(\d+)$#', $pa
 }
 elseif ($path === '' || $path === '/')
 
+// ── CATEGORIAS ────────────────────────────────────────────────
+if ($method === 'GET' && ($path === '/categories' || $path === '/categorias')) {
+    require_once __DIR__ . '/../routes/GET/lista-categorias.php';
+    exit;
+}
+
+if ($method === 'GET' && preg_match('#^/(categories|categorias)/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[2];
+    require_once __DIR__ . '/../routes/GET/lista-categorias.php';
+    exit;
+}
+
+if ($method === 'POST' && ($path === '/categories' || $path === '/categorias' || $path === '/crear-categoria')) {
+    require_once __DIR__ . '/../routes/POST/crear-categoria.php';
+    exit;
+}
+
+if ($method === 'PUT' && preg_match('#^/(categories|categorias)/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[2];
+    require_once __DIR__ . '/../routes/PUT/actualizar-categoria.php';
+    exit;
+}
+
+if ($method === 'DELETE' && preg_match('#^/(categories|categorias)/(\d+)$#', $path, $m)) {
+    $_GET['id'] = $m[2];
+    require_once __DIR__ . '/../routes/DELETE/borrar-categoria.php';
+    exit;
+}
+
 // ── CARRITO ───────────────────────────────────────────────────
 if ($method === 'GET' && $path === '/carrito') {
     require_once __DIR__ . '/../routes/GET/ver-carrito.php';
