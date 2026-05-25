@@ -25,11 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(["mensaje" => "El carrito está vacío"]);
             exit();
         }
-
-        $subtotal = array_reduce($carrito, function($sum, $item) {
+$subtotal = array_reduce($carrito, function($sum, $item) {
     return $sum + $item['subtotal'];
 }, 0);
-$total = $subtotal * 1.19; // incluye IVA 19%
+$total = round($subtotal * 1.19);
 
         $nombre       = $data->nombre ?? '';
         $apellido     = $data->apellido ?? '';
